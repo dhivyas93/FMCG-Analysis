@@ -1,0 +1,76 @@
+---
+title: "Classifier Algorithm - Skeleton"
+author: "Dhivya"
+date: "25 September 2016"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+############### Classifier Algorithm ###############
+
+###Done for variant-1163 alone, to be generalised###
+
+#Extracting data
+```{r}
+dv_dq=read.csv("E:/Applied analytics/Competitor Analysis/Quarter Sales data.csv")
+dv_dq[is.na(dv_dq)]=0
+```
+
+
+#Finding the means of growth sales and drop sales
+```{r}
+pos_val=data.frame(1:8,0);
+neg_val=data.frame(1:8,0);
+
+for (i in 1:8) {
+  if(dv_dq$Change.in.volume.sales[i]<0){
+    neg_val[i,2]=dv_dq$Change.in.volume.sales[i]
+  }
+  else{
+    pos_val[i,2]=dv_dq$Change.in.volume.sales[i]
+  }
+}
+
+mean_neg=mean(neg_val[,2])
+mean_pos=mean(pos_val[,2])
+```
+
+
+#Generating the 8 digit code
+```{r}
+code=data.frame(1:8,0);
+
+for (i in 1:8) {
+  if(dv_dq$Change.in.volume.sales[i]>0 && dv_dq$Change.in.volume.sales[i]<mean_pos){
+    code[i,2]=1;
+  }
+  
+  if(dv_dq$Change.in.volume.sales[i]>mean_pos){
+    code[i,2]=2;
+  }
+  
+  else if(dv_dq$Change.in.volume.sales[i]<0 && dv_dq$Change.in.volume.sales[i]>mean_neg){
+    code[i,2]=3;
+  }
+  else if(dv_dq$Change.in.volume.sales[i]<mean_neg){
+    code[i,2]=4;
+  }
+  else if(dv_dq$Change.in.volume.sales[i]==0){
+    code[i,2]=4;
+  }
+}
+
+```
+
+#####The generated code
+```{r}
+Code_1163=0
+for(i in 1:8){
+  Code_1163[i]=code[i,2]
+}
+Code_1163
+```
+
